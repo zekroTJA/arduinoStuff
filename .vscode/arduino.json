@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
     "port": "COM3",
-    "sketch": "test.ino"
+    "sketch": "dht11\\main.ino"
 }
