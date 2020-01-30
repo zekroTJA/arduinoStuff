@@ -1,4 +1,7 @@
-#include "DHT.h"
+// Please use DHT Sensors version 1.3.2!
+// Later versions brake this program for some reason.
+#include <DHT.h>
+#include <DHT_U.h>
 
 /*
     A
@@ -10,7 +13,6 @@ E |   | C
   |   |
    ---
     D
-
 02  A   11
 03  B   07
 04  C   04
@@ -22,8 +24,9 @@ E |   | C
 10  D2  09
 11  D3  08
 12  D4  06
-
 */
+
+#define TIMING 5
 
 #define P_A    2
 #define P_B    3
@@ -65,6 +68,8 @@ const int NUMBER_PATTERNS[12][7] = {
 
 int currSelected = -1;
 int currStatus = 0;
+int dataBuffer = 0;
+int specifier = 0;
 
 DHT dht(P_DHT, DHTTYPE);
 
@@ -119,28 +124,25 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-    int data;
-    int specifier;
-    
-    if (currStatus <= 2000 / 15) {
-        data = dht.readTemperature();
+    if (currStatus == 1500 / (TIMING * 3)) {
+        dataBuffer = dht.readTemperature();
         specifier = CHAR_C;
-    } else if (currStatus <= 4000 / 15) {
-        data = dht.readHumidity();
+    } else if (currStatus == 4200 / (TIMING * 3)) {
+        dataBuffer = dht.readHumidity();
         specifier = CHAR_H;
-    } else {
+    } else if (currStatus == 6000 / (TIMING * 3)) {
         currStatus = 0;
     }
 
     currStatus++;
 
     int *digits;
-    asDigets(data, digits);
+    asDigets(dataBuffer, digits);
 
     setNumber(1, digits[0]);
-    delay(5);
+    delay(TIMING);
     setNumber(2, digits[1]);
-    delay(5);
+    delay(TIMING);
     setNumber(3, specifier);
-    delay(5);
+    delay(TIMING);
 }
