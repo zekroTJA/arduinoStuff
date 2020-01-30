@@ -25,6 +25,10 @@ E |   | C
 12  D4  06
 */
 
+// Uncomment this to enable debug output
+// via serial COM output
+//#define DEBUG
+
 // This defines the DHT Sensor type.
 // For example: DHT11, DHT13, ...
 #define DHTTYPE DHT11
@@ -168,7 +172,9 @@ void setup() {
     digitalWrite(P_D3, 1);
     digitalWrite(P_D4, 1);
 
+#ifdef DEBUG
     Serial.begin(9600);
+#endif
 }
 
 // the loop routine runs over and over again forever
@@ -176,11 +182,15 @@ void loop() {
     if (currStatus == 1500 / (TIMING * 3)) {
         data = dht.readTemperature();
         specifier = CHAR_C;
+#ifdef DEBUG
         Serial.println(data, specifier);
+#endif
     } else if (currStatus == 4200 / (TIMING * 3)) {
         data = dht.readHumidity();
         specifier = CHAR_H;
+#ifdef DEBUG
         Serial.println(data, specifier);
+#endif
     } else if (currStatus == 6000 / (TIMING * 3)) {
         currStatus = 0;
     }
