@@ -27,7 +27,7 @@ E |   | C
 
 // Uncomment this to enable debug output
 // via serial COM output
-//#define DEBUG
+// #define DEBUG
 
 // This defines the DHT Sensor type.
 // For example: DHT11, DHT13, ...
@@ -197,7 +197,7 @@ void loop() {
 
     currStatus++;
 
-    int *digits;
+    int digits[2];
     asDigets(data, digits);
 
     setNumber(1, digits[0]);
